@@ -26,8 +26,10 @@ Run the following commands:
 ```bash
 curl -O [https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/install_wg_export.sh](https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/install_wg_export.sh)
 
+```bash
 chmod +x install_wg_export.sh
 
+```bash
 ./install_wg_export.sh
 
 Method 2: FreeBSD Package Install (.txz)
