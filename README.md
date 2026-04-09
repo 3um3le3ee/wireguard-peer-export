@@ -29,7 +29,6 @@ Connect to your pfSense firewall via SSH (or use Diagnostics > Command Prompt).
 
 Download and run the install script:
 
-Bash
 curl -O https://raw.githubusercontent.com/3um3le3ee/wireguard-peer-export/main/install_wg_export.sh
 
 chmod +x install_wg_export.sh
