@@ -19,27 +19,18 @@ Native Menu Integration: The deployment script securely injects the tool directl
 Custom Dashboard Widget: Includes an optional widget so you can access the exporter directly from your main pfSense login screen.
 
 🚀 Installation
-There are two ways to install this tool on your pfSense firewall. Both methods require you to connect to your pfSense shell via SSH (or use Diagnostics > Command Prompt in the web interface).
+Automated Install (Recommended) You can deploy the export tool, the dashboard widget, and the native menu link in seconds using the included deployment script.
 
-Method 1: Automated Install (Recommended)
-You can deploy the export tool, the dashboard widget, and the native menu link in seconds using the included deployment script.
+Connect to your pfSense firewall via SSH (or use Diagnostics > Command Prompt).
 
-Bash
-curl -O https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/install_wg_export.sh
+Download and run the install script:
+
+curl -O https://raw.githubusercontent.com/3um3le3ee/wireguard-peer-export/main/install_wg_export.sh
+
 chmod +x install_wg_export.sh
+
 ./install_wg_export.sh
-Method 2: FreeBSD Package Install (.txz)
-Because this tool is also built as a self-contained FreeBSD package, you can install it cleanly using the native pkg manager.
 
-Bash
-pkg add https://github.com/3um3le3ee/pfSense-wireguard-peer-export/releases/download/v1.0/pfSense-pkg-wg-export-1.0.txz
-(Note: The firewall will automatically install the files, register the package, and restart the web interface to apply the new menu links).
-
-Uninstallation
-If you installed using the FreeBSD package (Method 2), you can completely remove the tool, delete the menu links, and clean up the pfSense database at any time by running:
-
-Bash
-pkg delete pfSense-pkg-wg-export
 📖 How to Use
 Log into your pfSense WebGUI.
 
@@ -71,5 +62,4 @@ CDN Usage: The only external requests this script makes are fetching the open-so
 ⚠️ Disclaimer
 This is an unofficial, community-created script. It is not affiliated with, maintained by, or supported by Netgate or the official pfSense project. Please review the code before running it on production firewalls.
 
-License
-Distributed under the MIT License. See LICENSE for more information.
+License Distributed under the MIT License. See LICENSE for more information.
