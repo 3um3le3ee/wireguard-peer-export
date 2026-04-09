@@ -1,4 +1,4 @@
-pfSense WireGuard Peer Export Utility
+pfSense WireGuard Peer Export
 ------------------------------------------------------------------------------------------------------------------------------------------
 A standalone, highly advanced PHP utility and dashboard widget that makes it incredibly easy to export WireGuard client configs and QR codes directly from pfSense, saving you time on mobile and desktop VPN provisioning.
 
