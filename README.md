@@ -29,7 +29,9 @@ Download and run the install script:
 
 Bash
 curl -O https://raw.githubusercontent.com/3um3le3ee/wireguard-peer-export/main/install_wg_export.sh
+
 chmod +x install_wg_export.sh
+
 ./install_wg_export.sh
 
 📖 How to Use
