@@ -40,7 +40,7 @@ Method 2: FreeBSD Package Install (.pkg)
 Because this tool is also built as a self-contained FreeBSD package, you can install it cleanly using the native pkg manager.
 
 ```bash
-pkg add https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/pfSense-pkg-wg-export-0.1.pkg
+curl -O https://github.com/3um3le3ee/pfSense-wireguard-peer-export/raw/refs/heads/main/pfSense-pkg-wg-export-0.1.pkg
 ```
 
 (Note: The firewall will automatically install the files, register the package, and restart the web interface to apply the new menu links).
