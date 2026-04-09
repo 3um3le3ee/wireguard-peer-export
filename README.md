@@ -1,4 +1,5 @@
 pfSense WireGuard Client Export Utility
+
 A standalone, highly advanced PHP utility and dashboard widget that makes it incredibly easy to export WireGuard client configs and QR codes directly from pfSense, saving you time on mobile and desktop VPN provisioning.
 
 While pfSense provides excellent built-in tools for OpenVPN client exports, provisioning WireGuard clients can still be a manual, tedious process. This lightweight utility bridges that gap by providing a seamless GUI to generate keys, build .conf files, configure split tunnels, and render mobile-ready QR codes without ever leaving your dashboard.
@@ -27,10 +28,9 @@ Connect to your pfSense firewall via SSH (or use Diagnostics > Command Prompt).
 Download and run the install script:
 
 Bash
-curl -O https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/install_wg_export.sh
+curl -O https://raw.githubusercontent.com/3um3le3ee/wireguard-peer-export/main/install_wg_export.sh
 chmod +x install_wg_export.sh
 ./install_wg_export.sh
-(Note: Replace YOUR_USERNAME/YOUR_REPO_NAME with your actual GitHub details).
 
 📖 How to Use
 Log into your pfSense WebGUI.
