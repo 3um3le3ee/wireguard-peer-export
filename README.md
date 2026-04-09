@@ -28,7 +28,7 @@ Connect to your pfSense firewall via SSH (or use Diagnostics > Command Prompt).
 
 Download and run the install script:
 ```bash
-curl -O https://github.com/3um3le3ee/pfSense-wireguard-peer-export/raw/refs/heads/main/install_wg_export.sh
+curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/install_wg_export.sh
 ```
 ```bash
 chmod +x install_wg_export.sh
@@ -40,7 +40,7 @@ Method 2: FreeBSD Package Install (.pkg)
 Because this tool is also built as a self-contained FreeBSD package, you can install it cleanly using the native pkg manager.
 
 ```bash
-curl -O https://github.com/3um3le3ee/pfSense-wireguard-peer-export/raw/refs/heads/main/pfSense-pkg-wg-export-0.1.pkg
+curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/pfSense-pkg-wg-export-0.1.pkg
 ```
 
 (Note: The firewall will automatically install the files, register the package, and restart the web interface to apply the new menu links).
@@ -50,7 +50,7 @@ Uninstallation
 You can completely remove the tool, delete the menu links, and clean up the pfSense database at any time by running:
 
 ```bash
-curl -O https://raw.githubusercontent.com/3um3le3ee/wireguard-peer-export/main/uninstall.sh
+curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/uninstall.sh
 ```
 ```bash
 chmod +x uninstall.sh
