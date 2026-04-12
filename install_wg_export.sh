@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "Deploying WG Peer Export (v3.3)..."
+echo "Deploying WG Peer Export (v3.3 with Auto-Provisioning)..."
 
 # Navigate to the web directory
 cd /usr/local/www || exit 1
@@ -14,7 +14,7 @@ cat << 'EOF' > /usr/local/www/vpn_wg_export.php
 /*
  * vpn_wg_export.php
  * Ultimate pfSense WG Peer Export (v3.3)
- * Features: Native OS Crypto, Zip/Tar Fallbacks, Split Tunnels, Live Status, Dark Mode, Widget Integration.
+ * Features: Native OS Crypto, Auto-Assignment, Zip/Tar Fallbacks, Split Tunnels, Live Status, Dark Mode, Widget Integration.
  */
 
 require_once("guiconfig.inc");
@@ -156,15 +156,42 @@ if (isset($_GET['action'])) {
         exit;
     }
 
-    if ($_GET['action'] === "gen_keys") {
+    // ACTION: Generate new WireGuard Keypair and PSK, and Auto-Assign to Peer
+    if ($_GET['action'] === "gen_keys" && isset($_GET['peer_idx'])) {
         header('Content-Type: application/json');
+        $peer_idx = htmlspecialchars($_GET['peer_idx']);
+        
         if (empty($wg_bin)) { echo json_encode(['error' => 'Could not locate wg executable.']); exit; }
 
         $priv = trim(shell_exec("{$wg_bin} genkey 2>/dev/null"));
         if (!empty($priv)) {
             $pub = trim(shell_exec("echo " . escapeshellarg($priv) . " | {$wg_bin} pubkey 2>/dev/null"));
             $psk = trim(shell_exec("{$wg_bin} genpsk 2>/dev/null"));
-            echo json_encode(['priv' => $priv, 'pub' => $pub, 'psk' => $psk]); exit;
+            
+            $applied = false;
+            global $config;
+
+            // Auto-assign to the specific peer and save configuration
+            if (isset($config['installedpackages']['wireguard']['peers']['item'][$peer_idx])) {
+                $config['installedpackages']['wireguard']['peers']['item'][$peer_idx]['publickey'] = $pub;
+                if (!empty($psk)) {
+                    $config['installedpackages']['wireguard']['peers']['item'][$peer_idx]['presharedkey'] = $psk;
+                }
+                
+                write_config("WireGuard Export Tool: Auto-assigned new Public Key and PSK to peer {$peer_idx}");
+                
+                // Resync WireGuard to apply the changes immediately
+                if (file_exists("/usr/local/pkg/wireguard/wg.inc")) {
+                    require_once("/usr/local/pkg/wireguard/wg.inc");
+                    if (function_exists("wg_resync")) {
+                        wg_resync();
+                    }
+                }
+                $applied = true;
+            }
+
+            echo json_encode(['priv' => $priv, 'pub' => $pub, 'psk' => $psk, 'applied' => $applied]); 
+            exit;
         } else {
             echo json_encode(['error' => "Command failed."]); exit;
         }
@@ -331,11 +358,7 @@ $a_peers = get_wg_config_array('peer');
             </div>
         </div>
 
-        <div id="newKeyAlert" class="alert alert-danger" style="display:none; text-align:center;">
-            <strong>Action Required:</strong> You generated new keys! Edit this Peer in pfSense and paste these values:<br><br>
-            Public Key: <code id="newPubKey" style="user-select: all; cursor: text;"></code><br>
-            Pre-Shared Key: <code id="newPskKey" style="user-select: all; cursor: text;"></code>
-        </div>
+        <div id="newKeyAlert" class="alert" style="display:none; text-align:center;"></div>
         
         <div class="row">
             <div class="col-sm-4">
@@ -391,6 +414,7 @@ $a_peers = get_wg_config_array('peer');
 let rawTemplateText = "";
 let defaultEndpoint = "";
 let currentPeerName = "";
+let currentPeerIdx = null;
 
 $('#searchPeers').on('keyup', function() {
     let value = $(this).val().toLowerCase();
@@ -401,11 +425,12 @@ $('#searchPeers').on('keyup', function() {
 
 function openExportModal(peerIdx, peerName) {
     currentPeerName = peerName;
+    currentPeerIdx = peerIdx;
     $('#exportModalLabel').text('Provisioning: ' + peerName);
     
     $('#clientPrivKey, #endpointOverride, #clientPsk').val('');
     $('#tunnelMode').val('full');
-    $('#newKeyAlert').hide();
+    $('#newKeyAlert').hide().removeClass('alert-success alert-danger').empty();
     $('#confText').val('Loading configuration...');
     $('#qrcode_canvas').empty();
     
@@ -462,13 +487,25 @@ function updateDisplays() {
 
 function generateNewKeys() {
     $('#genKeyBtn').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Generating...');
-    $.getJSON('vpn_wg_export.php?action=gen_keys', function(data) {
+    $.getJSON('vpn_wg_export.php?action=gen_keys&peer_idx=' + currentPeerIdx, function(data) {
         if(data && data.priv && data.pub) {
             $('#clientPrivKey').val(data.priv);
             $('#clientPsk').val(data.psk || "");
-            $('#newPubKey').text(data.pub);
-            $('#newPskKey').text(data.psk || "N/A");
-            $('#newKeyAlert').fadeIn();
+            
+            if (data.applied) {
+                $('#newKeyAlert')
+                    .removeClass('alert-danger')
+                    .addClass('alert-success')
+                    .html('<strong>Success!</strong> Keys generated and automatically assigned to this peer in pfSense.<br><br>Public Key: <code style="user-select: all; cursor: text;">' + data.pub + '</code><br>Pre-Shared Key: <code style="user-select: all; cursor: text;">' + (data.psk || "N/A") + '</code>')
+                    .fadeIn();
+            } else {
+                $('#newKeyAlert')
+                    .removeClass('alert-success')
+                    .addClass('alert-danger')
+                    .html('<strong>Action Required:</strong> Could not auto-assign keys. Paste these values into the Peer settings manually:<br><br>Public Key: <code style="user-select: all; cursor: text;">' + data.pub + '</code><br>Pre-Shared Key: <code style="user-select: all; cursor: text;">' + (data.psk || "N/A") + '</code>')
+                    .fadeIn();
+            }
+            
             updateDisplays();
         } else { alert("Error: " + (data.error || "Unknown")); }
         $('#genKeyBtn').prop('disabled', false).html('<i class="fa fa-refresh"></i> Generate New Keys');

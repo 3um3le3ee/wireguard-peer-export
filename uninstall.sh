@@ -18,9 +18,9 @@ echo "-> Scrubbing physical application files..."
 rm -f /usr/local/www/vpn_wg_export.php
 rm -f /usr/local/www/widgets/widgets/wg_client_export.widget.php
 
-# 3. Build the PHP cleanup script to scrub the XML database
+# 3. Scrub the XML database safely using an inline PHP execution
 echo "-> Cleaning up pfSense configuration database..."
-cat << 'EOF' > /tmp/wg_cleanup.php
+/usr/local/bin/php << 'PHP_EOF'
 <?php
 require_once("config.inc");
 require_once("util.inc");
@@ -29,9 +29,9 @@ global $config;
 $modified = false;
 
 // Remove the GUI Menu Link
-if (is_array($config["installedpackages"]["menu"])) {
+if (isset($config["installedpackages"]["menu"]) && is_array($config["installedpackages"]["menu"])) {
     foreach ($config["installedpackages"]["menu"] as $k => $m) {
-        if ($m["name"] === "WG Client Export") {
+        if (isset($m["name"]) && $m["name"] === "WG Client Export") {
             unset($config["installedpackages"]["menu"][$k]);
             $modified = true;
             break;
@@ -40,9 +40,9 @@ if (is_array($config["installedpackages"]["menu"])) {
 }
 
 // Remove the Package Manager Receipt (Just in case)
-if (is_array($config["installedpackages"]["package"])) {
+if (isset($config["installedpackages"]["package"]) && is_array($config["installedpackages"]["package"])) {
     foreach ($config["installedpackages"]["package"] as $k => $p) {
-        if ($p["name"] === "wg-export" || $p["name"] === "pfSense-pkg-wg-export") {
+        if (isset($p["name"]) && ($p["name"] === "wg-export" || $p["name"] === "pfSense-pkg-wg-export")) {
             unset($config["installedpackages"]["package"][$k]);
             $modified = true;
             break;
@@ -57,13 +57,9 @@ if ($modified) {
     echo "-> Database is already clean.\n";
 }
 ?>
-EOF
+PHP_EOF
 
-# 4. Execute the PHP script and delete it
-/usr/local/bin/php /tmp/wg_cleanup.php
-rm -f /tmp/wg_cleanup.php
-
-# 5. Restart the WebGUI
+# 4. Restart the WebGUI
 echo "-> Restarting pfSense WebGUI..."
 /etc/rc.restart_webgui
 
