@@ -52,7 +52,21 @@ A new **Peer Export** tab will appear under **VPN > WireGuard**.
 curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/uninstall.sh
 chmod +x uninstall.sh && ./uninstall.sh
 ```
+## 📊 Dashboard Widget
 
+The plugin includes a native pfSense Dashboard widget for real-time monitoring and quick management of your WireGuard peers.
+
+### How to Enable:
+1. Go to your pfSense **Dashboard** (Status > Dashboard).
+2. Click the **Add Widget** (+) icon at the top right.
+3. Select **WireGuard Peer Export** from the list.
+4. Click **Save Settings** at the top of the dashboard.
+
+### Widget Features:
+- **Live Telemetry:** Shows "Handshake" status (Green/Red) to see who is currently connected.
+- **Data Usage:** Displays total Transmit/Receive bytes for every active peer.
+- **Quick Export:** A one-click dropdown to instantly download a `.conf` file for any peer without leaving the dashboard.
+- **Peer Search:** Quickly filter through long lists of peers to find a specific endpoint.
 ## 📖 Usage
 
 ### Add a New Peer (The Provisioning Workflow)
