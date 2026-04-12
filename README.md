@@ -25,7 +25,7 @@ install the tool as a native pfSense package (which allows for cleaner managemen
 ```bash
 curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/pfSense-pkg-wg-export-0.4.2.pkg
 ```
-**1. Download the package**
+**2. Install the package**
 ```bash
 pkg add pfSense-pkg-wg-export-0.4.2.pkg
 ```
