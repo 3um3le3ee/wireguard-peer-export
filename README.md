@@ -21,12 +21,12 @@ Adding a WireGuard peer on pfSense normally means: create the peer in the GUI, m
 
 install the tool as a native pfSense package (which allows for cleaner management and persistence), use the following commands. This will download the pre-compiled `.pkg` and install it using the system's package manager.
 
-```bash
 # 1. Download the package
+```bash
 curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/pfSense-pkg-wg-export-0.4.2.pkg
 ```
-```bash
 # 2. Install the package
+```bash
 pkg add pfSense-pkg-wg-export-0.4.2.pkg
 ```
 ## 🚀 Quick Start (Manual Install)
