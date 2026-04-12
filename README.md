@@ -26,10 +26,10 @@ Method 1: FreeBSD Package Install (.pkg)
 Because this tool is also built as a self-contained FreeBSD package, you can install it cleanly using the native pkg manager.
 
 ```bash
-curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/pfSense-pkg-wg-export-0.2.pkg
+curl -LO https://raw.githubusercontent.com/3um3le3ee/pfSense-wireguard-peer-export/main/pfSense-pkg-wg-export-0.4.2.pkg
 ```
 ```bash
-pkg add -f pfSense-pkg-wg-export-0.2.pkg
+pkg add -f pfSense-pkg-wg-export-0.4.2.pkg
 ```
 
 Method 2: Automated Install Script
