@@ -82,6 +82,8 @@ The page also lists all configured peers with their tunnel, public key, allowed 
 
 ## 📁 Files
 
+- **`pfSense-pkg-wg-export-0.4.2.pkg`** Native pfSense Package — A pre-compiled binary that handles automated file placement, system registration, and clean uninstallation via the `pkg` manager.
+
 - **`vpn_wg_export.php`** Main page — contains the peer table, Auto-IP engine, strict backend validation, and AJAX endpoints.
 
 - **`wg_client_export.widget.php`** Dashboard widget — provides live telemetry, recent connections, and a quick-export dropdown.
